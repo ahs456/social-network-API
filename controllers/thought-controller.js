@@ -100,7 +100,7 @@ const thoughtController = {
         }
     },
 
-    // Delete a reaction froma  thought ( '/:thoughtID/reactions' DELETE request )
+    // Delete a reaction from a thought ( '/:thoughtID/reactions' DELETE request )
     async deleteReaction (req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
