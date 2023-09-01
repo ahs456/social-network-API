@@ -47,6 +47,39 @@ const thoughtController = {
             res.status(500).json(err)
         }
     },
+    
+    // Delete a thought ( DELETE '/:id ) 
+    async deleteThought(req, res) {
+        try {
+            const thoughtDataDb = await Thought.findOneAndDelete({_id: req.params.thoughtId})
+            if (!thoughtDataDb) {
+                res.status(404).json({message: 'Cannot find thought with that ID'});
+                return
+            }
+            res.status(200).json({message: "Thought is deleted successfully"})
+        } catch (err) {
+            console.log(err)
+            res.status(500).json(err)
+        }
+    },
+
+    // Update a thought ('/:id' PUT)
+    async updateThought(req, res) {
+        try {
+            const thoughtDataDb = await Thought.findOneAndUpdate(
+                {_id: req.params.thoughtId},
+                {$set: req.body},
+                {runValidators: true, new: true}
+            )
+            if (!thoughtDataDb) {
+                return res.status(404).json({message: 'Cannot find thought with that ID'});
+            }
+            res.json(thoughtDataDb);
+        } catch (err) {
+            console.log(err)
+            res.status(500).json(err)
+        }
+    },
 }
 
 module.exports = thoughtController;
