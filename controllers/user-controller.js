@@ -39,6 +39,44 @@ const userController = {
             res.status(500).json(err)
         }
     },
+
+    // Delete a user (DELETE request '/:id')
+    async deleteUser (req, res) {
+        try {
+          const userDataDb = await User.findOne({ _id: req.params.userId });
+          if (!userDataDb) {
+            return res.status(404).json({message: 'Cannot find user with that ID'});
+          }
+      
+          await Thought.deleteMany({ username: userDataDb.username });
+          await User.deleteOne({ _id: req.params.userId});
+      
+          res.status(200).json({message: 'User and attached thoughts removed from the Database!'});
+        } catch (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
+      },
+
+    // Update a user ( '/:id' PUT request )
+    async updateUser (req, res) {
+        try {
+          const userDataDb = await User.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: req.body },
+            { runValidators: true, new: true }
+          );
+      
+          if (!userDataDb) {
+            return res.status(404).json({message: 'Cannot find user with that ID'});
+          }
+      
+          res.status(200).json(userDataDb);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
+      },
 }
 
 module.exports = userController;
