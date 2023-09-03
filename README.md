@@ -23,5 +23,8 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 # Video walkthrough and installation
 
 
+# Screenshot of application
+
+
 # License
 N/A
