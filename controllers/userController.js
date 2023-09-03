@@ -85,13 +85,13 @@ const userController = {
         try {
           const friendDataDb = await User.findOne({id: req.params.friendId});
       
-          if (!friendDataDb) {
-            return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
-          }
+         // if (!friendDataDb) {
+           // return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
+          //}
       
           const userDataDb = await User.findOneAndUpdate(
             { id: req.params.userId },
-            { $push: { friends: friendDataDb.id } },
+            { $addToSet: { friends: friendDataDb.id } },
             { new: true }
           );
       
