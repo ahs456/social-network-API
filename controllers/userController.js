@@ -4,7 +4,7 @@ const userController = {
     // All users ( '/' GET request )
     async getUser (req, res) {
         try {
-            const userDataDb = await User.find({}).select('-__v').populate('thoughts').exec();
+            const userDataDb = await User.find().select('-__v')
             return res.status(200).json(userDataDb)
         } catch (err) {
             console.log(err)
@@ -14,6 +14,7 @@ const userController = {
 
     // Get a user ( '/:id' GET request )
     async getSingUser (req, res) {
+      console.log(req.params.userId);
         try {
             const userDataDb = await User.findOne({_id: req.params.userId})
             if (!userDataDb) {

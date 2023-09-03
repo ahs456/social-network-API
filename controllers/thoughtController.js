@@ -4,7 +4,7 @@ const thoughtController = {
     // All thoughts ( '/' GET request )
     async getThoughts (req, res) {
         try {
-            const thoughtDataDb = await Thought.find().sort({createdAt:-1});
+            const thoughtDataDb = await Thought.find()
             res.status(200).json(thoughtDataDb)
         } catch (err) {
             console.log(err)
