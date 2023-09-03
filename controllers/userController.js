@@ -14,9 +14,9 @@ const userController = {
 
     // Get a user ( '/:id' GET request )
     async getSingUser (req, res) {
-      console.log(req.params.userId);
+      console.log(req.params);
         try {
-            const userDataDb = await User.findOne({_id: req.params.userId})
+            const userDataDb = await User.findOne({id: req.params.userId})
             if (!userDataDb) {
                 return res.status(404).json({message: 'Cannot find user with that ID'});
             }
@@ -44,13 +44,13 @@ const userController = {
     // Delete a user (DELETE request '/:id')
     async deleteUser (req, res) {
         try {
-          const userDataDb = await User.findOne({ _id: req.params.userId });
+          const userDataDb = await User.findOne({ id: req.params.userId });
           if (!userDataDb) {
             return res.status(404).json({message: 'Cannot find user with that ID'});
           }
       
           await Thought.deleteMany({ username: userDataDb.username });
-          await User.deleteOne({ _id: req.params.userId});
+          await User.deleteOne({ id: req.params.userId});
       
           res.status(200).json({message: 'User and attached thoughts removed from the Database!'});
         } catch (err) {
@@ -83,15 +83,15 @@ const userController = {
     // Add new friend ( POST request '/:userID/friends/:friendID' )
     async userFriend (req, res) {
         try {
-          const friendDataDb = await User.findById(req.params.friendId);
+          const friendDataDb = await User.findOne({id: req.params.friendId});
       
           if (!friendDataDb) {
             return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
           }
       
           const userDataDb = await User.findOneAndUpdate(
-            { _id: req.params.userId },
-            { $push: { friends: friendDataDb._id } },
+            { id: req.params.userId },
+            { $push: { friends: friendDataDb.id } },
             { new: true }
           );
       
@@ -116,8 +116,8 @@ const userController = {
           }
       
           const userDataDb = await User.updateOne(
-            { _id: req.params.userID },
-            { $pull: { friends: friendDataDb._id } },
+            { id: req.params.userID },
+            { $pull: { friends: friendDataDb.id } },
             { new: true }
           );
       

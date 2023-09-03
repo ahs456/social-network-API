@@ -15,7 +15,7 @@ const thoughtController = {
     // A thought ( '/:id' GET request )
     async getSingThought(req, res) {
         try {
-            const thoughtDataDb = await Thought.findOne({_id: req.params.thoughtId})
+            const thoughtDataDb = await Thought.findOne({id: req.params.thoughtId})
             if (!thoughtDataDb) {
                 res.status(404).json({message: 'Cannot find thought with that ID'});
                 return
@@ -85,7 +85,7 @@ const thoughtController = {
     async addReaction (req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
-                {_id: req.params.thoughtID},
+                {id: req.params.thoughtID},
                 {$push: {reactions: req.body}},
                 {runValidators: true, new: true}
             );
@@ -104,7 +104,7 @@ const thoughtController = {
     async deleteReaction (req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
-                {_id: req.params.thoughtID},
+                {id: req.params.thoughtID},
                 {$pull: {reactions: {reactionId: req.params.reactionId}}},
                 {runValidators: true, new: true}
             );
