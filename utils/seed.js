@@ -1,6 +1,6 @@
 const connection = require('../config/connection');
 const { User, Thought } = require('../models');
-const { findRandomThought, findRandomUser } = require('./data')
+const { findRandomThought, findRandomUser } = require('./data');
 
 
 connection.on('error', (err) => err);
@@ -17,7 +17,8 @@ connection.once('open', async () => {
         console.log('Thoughts')
         await Thought.deleteMany({})
     }
-    let users = []
+
+    let users = [];
 
     for (let i = 0; i < 5; i++) {
         const username = findRandomUser(i)
@@ -29,7 +30,7 @@ connection.once('open', async () => {
         });
     }
 
-    await User.collection.insertMany(users)
+    await User.collection.insertMany(users);
     
     for (let i = 0; i < 5; i++) {
         const user = findRandomUser(i)
@@ -38,7 +39,7 @@ connection.once('open', async () => {
             thoughtText: findRandomThought(i),
             userId: user.id,
             username: user,
-        })
+        });
 
         await User.findOneAndUpdate(
             { username: user },
@@ -49,4 +50,4 @@ connection.once('open', async () => {
 
     console.info('Seeding complete! 🌱');
     process.exit(0);
-})
+});
