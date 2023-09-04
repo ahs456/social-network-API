@@ -82,24 +82,20 @@ const userController = {
 
     // Add new friend ( POST request '/:userID/friends/:friendID' )
     async userFriend (req, res) {
-        try {
-          const friendDataDb = await User.findOneandUpdate({id: req.params.friendId});
-      
-          if (!friendDataDb) {
-            return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
-          }
-      
-          const userDataDb = await User.findOneAndUpdate(
-            { id: req.params.userId },
-            { $addToSet: { friends: friendDataDb.id } },
-            { new: true }
-          );
-      
-          if (!userDataDb) {
-            return res.status(404).json({message: 'No user found with that ID! Make sure the user ID is valid.',});
-          }
-      
-          res.status(200).json(userDataDb);
+      try {
+        //   const friendDataDb = await User.findOneAndUpdate({id: req.params.friendId});
+        //  if (!friendDataDb) {
+        //    return res.status(404).json({message: ‘Cannot find friend with that ID, check and try again’});
+        //   }
+        const userDataDb = await User.findOneAndUpdate(
+          { id: req.params.userId },
+          { $addToSet: { friends: req.params.friendId } },
+          { runValidators: true, new: true }
+        );
+        if (!userDataDb) {
+          return res.status(404).json({message: 'No user found with that ID! Make sure the user ID is valid'});
+        }
+          return res.status(200).json(userDataDb);
         } catch (err) {
           console.log(err);
           res.status(500).json(err);
