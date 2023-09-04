@@ -16,7 +16,7 @@ const userController = {
     async getSingUser (req, res) {
       console.log(req.params);
         try {
-            const userDataDb = await User.findOne({id: req.params.userId})
+            const userDataDb = await User.findOne({_id: req.params.id})
             if (!userDataDb) {
                 return res.status(404).json({message: 'Cannot find user with that ID'});
             }
@@ -44,13 +44,13 @@ const userController = {
     // Delete a user (DELETE request '/:id')
     async deleteUser (req, res) {
         try {
-          const userDataDb = await User.findOne({ id: req.params.userId });
+          const userDataDb = await User.findOne({ _id: req.params.id });
           if (!userDataDb) {
             return res.status(404).json({message: 'Cannot find user with that ID'});
           }
       
           await Thought.deleteMany({ username: userDataDb.username });
-          await User.deleteOne({ id: req.params.userId});
+          await User.deleteOne({ _id: req.params.id});
       
           res.status(200).json({message: 'User and attached thoughts removed from the Database!'});
         } catch (err) {
@@ -82,14 +82,15 @@ const userController = {
 
     // Add new friend ( POST request '/:userID/friends/:friendID' )
     async userFriend (req, res) {
+      console.log(req.params);
       try {
         //   const friendDataDb = await User.findOneAndUpdate({id: req.params.friendId});
         //  if (!friendDataDb) {
         //    return res.status(404).json({message: ‘Cannot find friend with that ID, check and try again’});
         //   }
         const userDataDb = await User.findOneAndUpdate(
-          { id: req.params.userId },
-          { $addToSet: { friends: req.params.friendId } },
+          { _id: req.params.userID },
+          { $addToSet: { friends: req.params.friendID } },
           { runValidators: true, new: true }
         );
         if (!userDataDb) {
@@ -105,15 +106,16 @@ const userController = {
 
     // Remove a friend ( DELETE request '/:userID/friends/:friendID' )
     async removeFriend (req, res) {
+      console.log(req.params);
         try {
-          const friendDataDb = await User.findOne(req.params.friendID);
-          if (!friendDataDb) {
-            return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
-          }
+          const friendDataDb = await User.findOneAndUpdate(req.params.friendID);
+          //if (!friendDataDb) {
+            //return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
+          //}
       
-          const userDataDb = await User.updateOne(
-            { id: req.params.userID },
-            { $pull: { friends: friendDataDb.id } },
+          const userDataDb = await User.deleteOne(
+            { _id: req.params.userID },
+            { $pull: { friends: friendDataDb._id } },
             { new: true }
           );
       
