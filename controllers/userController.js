@@ -113,7 +113,7 @@ const userController = {
             //return res.status(404).json({message: 'Cannot find friend with that ID, check and try again'});
           //}
       
-          const userDataDb = await User.deleteOne(
+          const userDataDb = await User.updateOne(
             { _id: req.params.userID },
             { $pull: { friends: friendDataDb._id } },
             { new: true }
