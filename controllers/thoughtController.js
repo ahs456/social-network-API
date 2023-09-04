@@ -106,7 +106,7 @@ const thoughtController = {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
                 {_id: req.params.thoughtID},
-                {$pull: {reactions: {reactionId: req.params.reactionId}}},
+                {$pull: {reactions: {reactionId: req.body.reactionId}}},
                 {runValidators: true, new: true}
             );
             if (!thoughtDataDb) {
