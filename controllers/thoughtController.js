@@ -102,10 +102,11 @@ const thoughtController = {
 
     // Delete a reaction from a thought ( '/:thoughtID/reactions' DELETE request )
     async deleteReaction (req, res) {
+        console.log(req.params);
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
                 {_id: req.params.thoughtID},
-                {$pull: {reactions: {reactionId: req.params.reactionID}}},
+                {$pull: {reactions: {reactionId: req.params.reactionId}}},
                 {runValidators: true, new: true}
             );
             if (!thoughtDataDb) {
@@ -116,7 +117,7 @@ const thoughtController = {
             console.log(err)
             res.status(500).json(err)
         }
-    },
+    }
 };
 
 module.exports = thoughtController;
