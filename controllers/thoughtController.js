@@ -15,7 +15,7 @@ const thoughtController = {
     // A thought ( '/:id' GET request )
     async getSingThought(req, res) {
         try {
-            const thoughtDataDb = await Thought.findOne({id: req.params.thoughtId})
+            const thoughtDataDb = await Thought.findOne({_id: req.params.id})
             if (!thoughtDataDb) {
                 res.status(404).json({message: 'Cannot find thought with that ID'});
                 return
@@ -50,7 +50,7 @@ const thoughtController = {
     // Delete a thought ( '/:id DELETE request ) 
     async deleteThought(req, res) {
         try {
-            const thoughtDataDb = await Thought.findOneAndDelete({_id: req.params.thoughtId})
+            const thoughtDataDb = await Thought.findOneAndDelete({_id: req.params.id})
             if (!thoughtDataDb) {
                 res.status(404).json({message: 'Cannot find thought with that ID'});
                 return
@@ -66,7 +66,7 @@ const thoughtController = {
     async updateThought(req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
-                {_id: req.params.thoughtId},
+                {_id: req.params.id},
                 {$set: req.body},
                 {runValidators: true, new: true}
             );
@@ -85,7 +85,7 @@ const thoughtController = {
     async addReaction (req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
-                {id: req.params.thoughtID},
+                {_id: req.params.thoughtID},
                 {$push: {reactions: req.body}},
                 {runValidators: true, new: true}
             );
@@ -104,8 +104,8 @@ const thoughtController = {
     async deleteReaction (req, res) {
         try {
             const thoughtDataDb = await Thought.findOneAndUpdate(
-                {id: req.params.thoughtID},
-                {$pull: {reactions: {reactionId: req.params.reactionId}}},
+                {_id: req.params.thoughtID},
+                {$pull: {reactions: {reactionId: req.params.reactionID}}},
                 {runValidators: true, new: true}
             );
             if (!thoughtDataDb) {
